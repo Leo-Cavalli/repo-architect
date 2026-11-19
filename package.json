@@ -1,7 +1,7 @@
 {
   "name": "repo-architect-skill",
-  "version": "1.0.0",
-  "description": "Clean Architecture, Clean Code, SOLID Encapsulation & Anti-Duplication Guardian Skill for AI Agents. Works with repo-builder and repo-visualizer.",
+  "version": "1.1.0",
+  "description": "Clean Architecture, Deep Modules (Ousterhout), SOLID Encapsulation & Dual-Axis Audit Guardian Skill for AI Agents. Works with repo-builder and repo-visualizer.",
   "license": "MIT",
   "bin": {
     "repo-architect-check": "./scripts/check_arch_rules.cjs"

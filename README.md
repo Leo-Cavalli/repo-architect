@@ -1,7 +1,7 @@
-# 🏛️ Repo Architect — Clean Code & Layered Architecture Guardian (`repo-architect`)
+# 🏛️ Repo Architect — Clean Code, Deep Modules & Dual-Axis Guardian (`repo-architect` v1.1.0)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-cyan.svg)](./package.json)
+[![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-cyan.svg)](./package.json)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-emerald.svg)](#)
 [![Triad Ecosystem](https://img.shields.io/badge/Ecosystem-repo--architect_%2B_builder_%2B_visualizer-purple.svg)](https://github.com/Leo-Cavalli/repo-visualizer)
 
@@ -35,12 +35,20 @@ O `repo-architect` fecha o ciclo completo de engenharia de software assistida po
    - Obriga a IA a verificar componentes UI (`src/components/`), funções utilitárias (`src/utils/`) e serviços (`src/domain/`) existentes antes de criar novos, aumentando o reuso e economizando tokens.
 2. **📐 Pilar 2 — Lei da Direção das Dependências (Camadas Topológicas C3):**
    - Impõe fluxo unidirecional estrito (`Tier 1: Screens` $\rightarrow$ `Tier 2: UI Widgets` / `Tier 3: Domain Services & Adapters` $\rightarrow$ `Tier 4: Interfaces & Contracts` / `Tier 5: Database`). Proíbe telas de acessarem o banco ou SDKs externos diretamente, mantendo o **Diagrama C3 do `repo-visualizer` sempre limpo e desemaranhado**.
-3. **🛡️ Pilar 3 — Encapsulamento Estrito (*Private-First*) & SOLID:**
-   - Atributos internos de classes nascem `private` ou `protected` por padrão, e integrações externas exigem inversão de dependência via `interface` + `Adapter`.
-4. **📂 Pilar 4 — Padronização de Pastas & Regra Anti-"God File" (SRP):**
-   - Mantém arquivos pequenos, coesos e separados por responsabilidade (`pages/`, `components/ui/`, `domain/`, `adapters/`, `utils/`, `prisma/`), reduzindo drasticamente os tokens gastos quando a IA precisa editar um módulo.
+3. **🛡️ Pilar 3 — Deep Modules (Ousterhout), Encapsulamento (*Private-First*) & SOLID:**
+   - Atributos internos de classes nascem `private` ou `protected` por padrão; integrações externas exigem `interface` + `Adapter`; e o **Teste de Deleção** (*A Philosophy of Software Design*) bloqueia *Shallow Modules* (wrappers rasos sem valor).
+4. **📂 Pilar 4 — Padronização de Pastas, Anti-"God File" (SRP) & Filtro Triplo de ADRs:**
+   - Mantém arquivos pequenos e coesos (`pages/`, `components/ui/`, `domain/`, `adapters/`, `utils/`, `prisma/`) e aplica o **Filtro Triplo de ADR** (difícil de reverter + surpreendente sem contexto + trade-offs reais) para o Capítulo 09 do arc42.
 5. **🗄️ Pilar 5 — Integridade Relacional Explícita no Banco (DER):**
    - Garante que toda coluna de chave estrangeira (`*Id` / `*_id`) declare seu relacionamento explícito (`@relation`, `REFERENCES`, `.references()`), evitando tabelas órfãs no **Diagrama DER**.
+
+---
+
+## ⚖️ Validador CLI de Eixo Duplo (*Dual-Axis Audit* — `check_arch_rules.cjs`)
+
+O validador `check_arch_rules.cjs` **nunca mistura placares** — ele reporta dois eixos independentes:
+- **🏛️ EIXO 1 — Saúde Estrutural:** Violações de camada C3, Encapsulamento OOP, *Shallow Modules* (*Teste de Deleção*), *God Files* (> 300 linhas), componentes UI sem uso e FKs órfãs no DER.
+- **🏷️ EIXO 2 — Aderência Semântica (`@arch` vs. Código Real):** Cobertura de tags `@arch:*`, *Role Drift* (tag contradizendo o código real), `@arch:external` ausente em adaptadores e tags `pending`/`modified` aguardando sincronização no `repo-visualizer`.
 
 ---
 

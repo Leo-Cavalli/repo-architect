@@ -53,15 +53,16 @@ As três skills foram desenhadas sob o Princípio da Responsabilidade Única (SR
 * **Justificativa:**
   * Garante que o **Diagrama C3 do `repo-visualizer` nunca fique emaranhado**! Quando o código respeita camadas unidirecionais, todas as setas do diagrama fluem limpas de cima para baixo, sem dependências cíclicas.
 
-### Pilar 3: Encapsulamento Estrito (*Private-First*) & Inversão de Dependência (SOLID)
+### Pilar 3: Deep Modules (Ousterhout), Encapsulamento Estrito (*Private-First*) & Inversão de Dependência (SOLID)
 * **Regra Operacional:**
   1. **Encapsulamento por Padrão:** Todo atributo interno de classe (estado, dependências injetadas, segredos, contadores, configurações) deve ser declarado como `private` (ou `protected` em classes base abstratas). Apenas métodos de negócio do contrato devem ser `public`.
-  2. **Inversão de Dependência (DIP):** Serviços de domínio nunca acoplam diretamente em provedores externos concretos (ex.: Stripe, SendGrid, AWS S3); eles dependem de uma `interface` (ex.: `IPaymentGateway`) implementada por um Adapter (`StripeGatewayAdapter`).
+  2. **Deep Modules & Teste de Deleção (*Deletion Test* — John Ousterhout):** Baseado em *A Philosophy of Software Design*, prefira **Módulos Profundos** (interfaces públicas pequenas e claras que escondem complexidade real por trás). Evite criar *Shallow Modules* (wrappers/helpers rasos que apenas repassam uma chamada sem adicionar valor). Antes de criar uma camada extra, aplique o **Teste de Deleção**: *"Se eu deletar esta classe e chamar o alvo diretamente, o código fica mais simples sem perder abstração?"*
+  3. **Inversão de Dependência (DIP):** Serviços de domínio nunca acoplam diretamente em provedores externos concretos (ex.: Stripe, SendGrid, AWS S3); eles dependem de uma `interface` (ex.: `IPaymentGateway`) implementada por um Adapter (`StripeGatewayAdapter`).
 * **Justificativa:**
-  * Elimina os alertas de *"Quebra de Encapsulamento OOP"* e *"Alto Acoplamento"* na **Aba 6 do `repo-visualizer`**.
+  * Elimina os alertas de *"Quebra de Encapsulamento OOP"*, *"Módulo Raso (Teste de Deleção)"* e *"Alto Acoplamento"* na **Aba 6 do `repo-visualizer`**.
   * Torna o **Diagrama de Classes UML (Aba 3)** claro, seguro e extensível.
 
-### Pilar 4: Padronização de Estrutura de Pastas & Regra Anti-"God File" (SRP)
+### Pilar 4: Padronização de Estrutura de Pastas, Anti-"God File" (SRP) & Filtro Triplo de ADRs
 * **Regra Operacional:**
   * Cada arquivo deve ter uma única responsabilidade clara e morar em seu diretório semântico:
     * `src/pages/` ou `src/app/` $\rightarrow$ Telas e rotas (`Tier 1`)
@@ -71,8 +72,17 @@ As três skills foram desenhadas sob o Princípio da Responsabilidade Única (SR
     * `src/utils/` $\rightarrow$ Funções utilitárias puras e formatadores (`Tier 3`)
     * `prisma/` ou `db/` $\rightarrow$ Schemas e migrações de banco de dados (`Tier 5`)
   * **Limite Anti-Monolito:** Evitar arquivos com mais de 300 linhas ou que misturem Telas de rota com Componentes UI genéricos e classes de serviço no mesmo arquivo.
+  * **Filtro Triplo de ADR (`doc/architecture/09_architecture_decisions.md`):** Só documente uma decisão como ADR no Capítulo 09 do arc42 se ela for: **(1) difícil de reverter**, **(2) surpreendente sem contexto** e **(3) envolver trade-offs reais**.
 * **Justificativa:**
   * Quando cada arquivo é pequeno e coeso, nas sessões futuras a IA só precisa ler **1 arquivo de 60 linhas** em vez de um arquivo monolítico de 600 linhas, gerando economia contínua de tokens.
+
+---
+
+## 4. Auditoria de Eixo Duplo (*Dual-Axis Audit*)
+
+Inspirada em revisões isoladas de alta disciplina, o validador `check_arch_rules.cjs` e a Aba 6 do `repo-visualizer` **nunca fundem as notas** em um placar único. Eles reportam dois eixos independentes:
+1. **🏛️ Eixo 1 — Saúde Estrutural:** Avalia Clean Architecture, Camadas C3, Encapsulamento OOP, *Deep Modules* (*Teste de Deleção*), *God Files* e Integridade DER.
+2. **🏷️ Eixo 2 — Aderência Semântica (`@arch` vs. Código Real):** Verifica se o que a IA declarou nas tags `@arch:*` corresponde à realidade do código (*Role Drift*, cobertura `@arch`, `@arch:external` ausente e status `pending`/`modified` não sincronizados).
 
 ### Pilar 5: Integridade Relacional Explícita no Banco de Dados
 * **Regra Operacional:** Ao criar ou modificar tabelas (`.prisma`, `.sql`, Drizzle, TypeORM), toda coluna de chave estrangeira (`*Id` ou `*_id`) deve obrigatoriamente declarar seu vínculo relacional explícito (`@relation` no Prisma, `FOREIGN KEY ... REFERENCES` no SQL, `.references()` no Drizzle), além de `@id` / `PRIMARY KEY`.

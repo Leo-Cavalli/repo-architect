@@ -42,7 +42,8 @@ Todo `import` deve fluir estritamente de cima para baixo entre as 5 camadas:
 Após criar ou refatorar arquivos, valide **separadamente** o **Eixo 1 (Saúde Estrutural)** e o **Eixo 2 (Aderência Semântica `@arch`)** executando:
 
 ```bash
-node ~/.agents/skills/repo-architect/scripts/check_arch_rules.cjs /caminho/do/repositorio
+# Substitua pelo diretório onde a skill está instalada (~/.gemini/skills/ ou ~/.agents/skills/)
+node "<diretorio-da-skill>/repo-architect/scripts/check_arch_rules.cjs" /caminho/do/repositorio
 ```
 
 ---
@@ -50,4 +51,5 @@ node ~/.agents/skills/repo-architect/scripts/check_arch_rules.cjs /caminho/do/re
 ## 3. Referência Profunda (Carregamento Sob Demanda)
 
 - Para consultar a justificativa completa dos 5 Pilares, Deep Modules e critérios de ADR, leia [`references/clean-architecture-pillars.md`](./references/clean-architecture-pillars.md) apenas quando precisar planejar ou refatorar uma arquitetura complexa.
+- Prefira entregas incrementais em **fatias verticais verificáveis (*Tracer Bullets*)** acompanhadas de testes comportamentais automatizados nas fronteiras públicas.
 - Caso a skill **`repo-builder`** esteja instalada, anote os elementos criados com as tags `@arch:*` (`@arch:status pending` ou `modified`).
